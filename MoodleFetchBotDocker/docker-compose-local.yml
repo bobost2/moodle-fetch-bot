@@ -1,0 +1,51 @@
+version: '3.5'
+
+services:
+  mysql:
+    image: mysql:latest
+    container_name: mysql
+    restart: always
+    environment:
+      MYSQL_ROOT_PASSWORD: "${DATABASE_PASSWORD}"
+      MYSQL_DATABASE: MoodleFetchBotDB
+    ports:
+      - 3306:3306
+    expose:
+      - 3306
+    volumes:
+      - mysql_data:/var/lib/mysql
+
+  phpmyadmin:
+    image: phpmyadmin:latest
+    container_name: phpmyadmin
+    restart: always
+    environment:
+      PMA_USER: root
+      PMA_PASSWORD: "${DATABASE_PASSWORD}"
+      PMA_PORT: 3306
+      PMA_HOST: mysql
+    ports:
+      - 5050:80
+
+
+  # moodle-fetch-bot-api:
+  #   container_name: moodle-fetch-bot-api
+  #   restart: "always"
+  #   build:
+  #     context: ../MoodleFetchBotAPI
+  #     dockerfile: Dockerfile 
+  #   ports:
+  #     - "5000:80"
+  #   depends_on: 
+  #     - mysql
+  #   networks:
+  #     - docker-network
+  #   environment: 
+  #     DiscordBotToken: "${DISCORD_BOT_TOKEN}"
+
+volumes:
+  mysql_data:
+
+networks:
+  docker-network:
+    external: false
