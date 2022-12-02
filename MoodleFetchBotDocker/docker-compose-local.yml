@@ -42,6 +42,9 @@ services:
   #     - docker-network
   #   environment: 
   #     DiscordBotToken: "${DISCORD_BOT_TOKEN}"
+  #     DiscordClientId: "${DISCORD_CLIENT_ID}"
+  #     DiscordClientSecret: "${DISCORD_CLIENT_SECRET}"
+  #     DBPassword: "${DATABASE_PASSWORD}"
 
 volumes:
   mysql_data:
