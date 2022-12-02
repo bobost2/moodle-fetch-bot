@@ -4,6 +4,7 @@ import React from 'react';
 import './App.css';
 import LoginComponent from './components/LoginComponent/LoginComponent';
 import AuthUserComponent from './components/AuthUserComponent/AuthUserComponent';
+import MainPage from './components/MainPage/MainPage';
 
 function App() {
 
@@ -18,7 +19,8 @@ function App() {
       <ThemeProvider theme={darkTheme}>
         <BrowserRouter>
           <Routes>
-            <Route path="/" element={<LoginComponent />} />
+            <Route path="/" element={<MainPage />} />
+            <Route path="/login" element={<LoginComponent />} />
             <Route path="/auth" element={<AuthUserComponent />} />
           </Routes>
         </BrowserRouter>
