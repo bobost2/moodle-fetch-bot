@@ -1,0 +1,48 @@
+.MainPage {
+    height: 92vh;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+}
+
+.ContentBox {
+    background: #00000045;
+    width: 90%;
+    height: 70%;
+    align-self: center;
+    box-shadow: 0px 0px 7px 1px;
+    border-radius: 10px;
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+
+    &_title{
+        background: #0000002e;
+        border-top-right-radius: 10px;
+        border-top-left-radius: 10px;
+        font-size: 30px;
+        font-weight: 600;
+        color: white;
+        height: 50px;
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        border-bottom: 1px solid #0000004a;
+    }
+
+    &_bottom{
+        background: #0000002e;
+        border-bottom-right-radius: 10px;
+        border-bottom-left-radius: 10px;
+        font-size: 23px;
+        font-weight: 600;
+        color: white;
+        height: 85px;
+        display: flex;
+        border-top: 1px solid #0000004a;
+        margin-top: 36%;
+        align-items: center;
+        justify-content: center;
+        flex-direction: column;
+    }
+}
