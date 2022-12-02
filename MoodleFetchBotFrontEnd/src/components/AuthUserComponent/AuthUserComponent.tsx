@@ -70,7 +70,7 @@ const AuthUserComponent: FC<AuthUserComponentProps> = () => {
                 })
                 .then(data => {
                   if(data.hasBeenRegistered){
-                    console.log("Account exists.");
+                    window.location.href = "/";
                   } else {
                     setEnableAccountWin(true);
                   }
@@ -82,7 +82,7 @@ const AuthUserComponent: FC<AuthUserComponentProps> = () => {
           .catch((error) => {
             if(userToken === "") {
               console.error(error);
-              window.location.href = "/";
+              window.location.href = "/login";
             }
           });
     }
@@ -92,11 +92,11 @@ const AuthUserComponent: FC<AuthUserComponentProps> = () => {
       {
         // var errorDescription = url.searchParams.get("error_description") || "";
         // console.error(errorDescription);
-        window.location.href = "/";
+        window.location.href = "/login";
       }
       else
       {
-        window.location.href = "/";
+        window.location.href = "/login";
       }  
     }
   }
