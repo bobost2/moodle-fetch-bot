@@ -122,7 +122,7 @@ const AuthUserComponent: FC<AuthUserComponentProps> = () => {
         })
         .then(data => {
           if(data.verificationPassed){
-            console.log("Account created!");
+            window.location.href = "/";
           } else {
             setEnableAccountWin(true);
             setVerificationFailed(true);
