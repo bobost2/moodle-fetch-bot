@@ -45,6 +45,8 @@ services:
   #     DiscordClientId: "${DISCORD_CLIENT_ID}"
   #     DiscordClientSecret: "${DISCORD_CLIENT_SECRET}"
   #     DBPassword: "${DATABASE_PASSWORD}"
+  #     MYSQL_DATABASE_IP: mysql
+  #     PROD_FRONTEND: http://localhost:3000 # for what was this used?
 
 volumes:
   mysql_data:

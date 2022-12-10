@@ -19,23 +19,25 @@ namespace MoodleFetchBotAPI.Controllers
             Configuration = configuration;
         }
 
+        /*
         [HttpGet]
         [Route("TestRequest")]
-        public IActionResult TestRequest(string username, string password)
+        public IActionResult TestRequest()
         {
-            MoodleService moodleService = new MoodleService();
+            //MoodleService moodleService = new MoodleService();
 
-            string website = null;
-            string token = null;
+            //string website = null;
+            //string token = null;
 
 
             //return Json(new { output = moodleService.FetchCourses(website, token, Course.Classification.inprogress) });
             //return Json(new { output = moodleService.FetchCourseData(website, token, 0) });
             //return Json(new { output = moodleService.FetchAssignments(website, token, 0) });
             //return Json(new { output = moodleService.FetchForum(website, token, 0) });
-            return Json(new { token = moodleService.GetToken(website, username, password) });
-
-        }
+            //return Json(new { token = moodleService.GetToken(website, username, password) });
+            var guilds = DiscordBotService.GetGulds();
+            return Ok(new { guilds = guilds });
+        }*/
 
         [HttpPost]
         [Route("AuthenticateDiscord")]
@@ -79,6 +81,57 @@ namespace MoodleFetchBotAPI.Controllers
             database.LinkMoodleToDiscordId(userId, moodleToken, moodleCredentials.website);
 
             return Ok(new { verificationPassed = true });
+        }
+
+        [HttpPost]
+        [Route("FetchBotServersForUser")]
+        public async Task<IActionResult> FetchBotServersForUser(DiscordSingleToken discordSingleToken)
+        {
+            var discordAPI = new DiscordAPIService(Configuration);
+            var databaseAPI = new DatabaseService();
+
+            var guilds = await DiscordBotService.GetGulds();
+            var userId = discordAPI.GetDiscordUserId(discordSingleToken.userToken);
+
+            var returnedGuilds = new List<SimpleDiscordGuild>();
+
+            foreach (var guild in guilds)
+            {
+                //If the bot is added by a non-owner, it will cause issues
+                if(guild.OwnerId.ToString() == userId)
+                {
+                    returnedGuilds.Add(new SimpleDiscordGuild
+                    {
+                        id = guild.Id.ToString(),
+                        name = guild.Name,
+                        iconUrl = guild.IconUrl,
+                        configured = databaseAPI.CheckIfServerRecordExists(guild.Id.ToString())
+                    });
+                }
+                else
+                {
+                    var users = guild.Users.ToList();
+                    //The list isn't always refreshed, sometimes returns 0 for some
+                    //unknown reasons (I have "SERVER MEMBERS INTENT" on in dev portal)
+
+                    foreach (var user in users)
+                    {
+                        //Console.WriteLine($"Found '{user.Username}' in '{guild.Name}'");
+                        if (user.GuildPermissions.ManageGuild == true && user.Id.ToString() == userId)
+                        {
+                            returnedGuilds.Add(new SimpleDiscordGuild
+                            {
+                                id = guild.Id.ToString(),
+                                name = guild.Name,
+                                iconUrl = guild.IconUrl,
+                                configured = databaseAPI.CheckIfServerRecordExists(guild.Id.ToString())
+                            });
+                        }
+                    }
+                }  
+            }
+
+            return Ok(new { guilds = returnedGuilds });
         }
     }
 }

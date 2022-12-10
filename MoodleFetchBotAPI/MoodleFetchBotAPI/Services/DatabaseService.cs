@@ -30,5 +30,12 @@ namespace MoodleFetchBotAPI.Services
                 context.SaveChanges();
             }
         }
+
+        public bool CheckIfServerRecordExists(string guildId)
+        {
+            MoodleFetchBotDBContext context = new MoodleFetchBotDBContext();
+            var server = context.ServerLists.Where(x => x.GuildId == guildId);
+            return server.Count() > 0;
+        }
     }
 }
