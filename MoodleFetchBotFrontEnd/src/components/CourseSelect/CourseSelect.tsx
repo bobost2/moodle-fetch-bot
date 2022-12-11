@@ -10,9 +10,16 @@ interface CourseSelectProps {
   updateState: Function;
 }
 
+interface SelectedElements{
+  ElementID: number;
+  Course: MoodleCourse;
+}
+
 const CourseSelect: FC<CourseSelectProps> = (props) => {
 
   const [courses, setCourses] = useState<MoodleCourse[]>([]);
+  const [selectedElements, setSelectedElements] = useState<SelectedElements[]>([]);
+  const [selectedElementsCount, setSelectedElementsCount] = useState(0);
   const [loaded, setLoaded] = useState(false);
 
   function FetchCourses(){
@@ -42,6 +49,19 @@ const CourseSelect: FC<CourseSelectProps> = (props) => {
       });
   }
 
+  function SelectElement(id: number, course: MoodleCourse, selected: boolean){
+    let selectedElementsLocal: SelectedElements[] = selectedElements;
+
+    if(selected){
+      selectedElementsLocal.push({ElementID: id, Course: course});
+    } else {
+      selectedElementsLocal = selectedElementsLocal.filter(element => element.ElementID !== id);
+    }
+
+    setSelectedElementsCount(selectedElementsLocal.length);
+    setSelectedElements(selectedElementsLocal);      
+  }
+
   function GoBack(){
     props.updateState(0);
   }
@@ -56,7 +76,7 @@ const CourseSelect: FC<CourseSelectProps> = (props) => {
         loaded ?
           <div className={`${styles.CourseList} ${styles.CourseListRes1}`}>
             {courses.map((course, i) => {
-                return (<CourseItem key={i} MoodleCourse={course} UpdateState={props.updateState}/>);
+                return (<CourseItem ElementId={i} SelectCourse={SelectElement} key={i} MoodleCourse={course} UpdateState={props.updateState}/>);
             })}
           </div>
         :
@@ -67,8 +87,8 @@ const CourseSelect: FC<CourseSelectProps> = (props) => {
       }
       <div className={`${styles2.ContentBox_bottom} ${styles.CourseBottomMenu}`} style={{height: '48px'}}>
         <Button variant="contained" color="error" onClick={GoBack}>Go back</Button>
-        <div>0 selected</div>
-        <Button variant="contained" color="success">Save settings</Button>
+        <div>{selectedElementsCount} selected</div>
+        <Button disabled={!(selectedElementsCount > 0)} variant="contained" color="success">Save settings</Button>
       </div>
     </div>
   );

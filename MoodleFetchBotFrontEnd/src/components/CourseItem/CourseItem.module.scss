@@ -1,5 +1,5 @@
 .CourseItem {
-    background: #00000038;
+    //background: #00000038;
     width: 350px;
     display: flex;
     align-items: center;
@@ -10,13 +10,37 @@
 }
 
 .CourseItem:hover {
-    background: #26262638;
+    //background: #26262638;
     cursor: pointer;
 }
 
 .CourseItem:active {
-    background: #33333338;
+    //background: #33333338;
     cursor: pointer;
+}
+
+.CourseItemDisabled {
+    background: #00000038;
+}
+
+.CourseItemDisabled:hover {
+    background: #26262638;
+}
+
+.CourseItemDisabled:active {
+    background: #33333338;
+}
+
+.CourseItemEnabled {
+    background: #007c0938;
+}
+
+.CourseItemEnabled:hover {
+    background: #00650738;
+}
+
+.CourseItemEnabled:active {
+    background: #01530638;
 }
 
 .CourseTitle{
