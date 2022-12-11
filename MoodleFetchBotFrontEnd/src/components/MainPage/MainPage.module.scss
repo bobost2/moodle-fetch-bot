@@ -45,3 +45,22 @@
         flex-direction: column;
     }
 }
+
+
+::-webkit-scrollbar-track
+{
+	-webkit-box-shadow: inset 0 0 6px rgba(0,0,0,0.3);
+	background-color: #0000001c;
+}
+
+::-webkit-scrollbar
+{
+	width: 8px;
+	background-color: #00000000;
+}
+
+::-webkit-scrollbar-thumb
+{
+	-webkit-box-shadow: inset 0 0 6px rgba(0,0,0,.3);
+	background-color: #ff8d00ab;
+}

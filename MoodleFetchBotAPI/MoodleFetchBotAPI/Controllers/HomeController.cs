@@ -4,6 +4,7 @@ using Microsoft.AspNetCore.Mvc;
 using MoodleFetchBotAPI.Models;
 using MoodleFetchBotAPI.Services;
 using Newtonsoft.Json;
+using Newtonsoft.Json.Linq;
 using RestSharp;
 using System.ComponentModel;
 
@@ -132,6 +133,29 @@ namespace MoodleFetchBotAPI.Controllers
             }
 
             return Ok(new { guilds = returnedGuilds });
+        }
+
+        [HttpPost]
+        [Route("FetchMoodleCourses")]
+        public async Task<IActionResult> FetchMoodleCourses(DiscordSingleToken discordSingleToken)
+        {
+            MoodleService moodleService = new MoodleService();
+            DiscordAPIService discordAPI = new DiscordAPIService(Configuration);
+            var databaseService = new DatabaseService();
+
+            List<Course> courses = new List<Course>();
+            string userId = discordAPI.GetDiscordUserId(discordSingleToken.userToken);
+
+            var userInfo = databaseService.FetchUserData(userId);
+
+            string website = userInfo.website;
+            string token = userInfo.token;
+
+            courses.AddRange(moodleService.FetchCourses(website, token, Course.Classification.past));
+            courses.AddRange(moodleService.FetchCourses(website, token, Course.Classification.inprogress));
+            courses.AddRange(moodleService.FetchCourses(website, token, Course.Classification.future));
+            
+            return Ok( new { courses = courses });
         }
     }
 }

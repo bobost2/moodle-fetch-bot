@@ -1,0 +1,41 @@
+.CourseItem {
+    background: #00000038;
+    width: 350px;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    border-radius: 10px;
+    box-shadow: 0 0 5px black;
+    cursor: default;
+}
+
+.CourseItem:hover {
+    background: #26262638;
+    cursor: pointer;
+}
+
+.CourseItem:active {
+    background: #33333338;
+    cursor: pointer;
+}
+
+.CourseTitle{
+    color: white;
+    //font-size: 20px;
+    font-weight: 600;
+    margin-bottom: 5px;
+}
+
+.CourseInnerBox{
+    display: flex;
+    width: 100%;
+    justify-content: center;
+    flex-direction: column;
+}
+
+.ViewCourse{
+    text-decoration: none !important;
+    color: #70a3ff !important;
+    font-weight: 700;
+    font-size: 14px;
+}

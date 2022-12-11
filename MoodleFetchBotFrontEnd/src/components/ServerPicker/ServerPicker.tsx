@@ -5,9 +5,11 @@ import ServerItem from '../ServerItem/ServerItem';
 import styles from './ServerPicker.module.scss';
 import styles2 from '../MainPage/MainPage.module.scss';
 
-interface ServerPickerProps {}
+interface ServerPickerProps {
+  updateState: Function
+}
 
-const ServerPicker: FC<ServerPickerProps> = () => {
+const ServerPicker: FC<ServerPickerProps> = (props) => {
   const redirect = encodeURIComponent(`${process.env.REACT_APP_RedirectURL}`);
   const [serverList, setServerList] = useState<DiscordServer[]>([]);
   var generateBotLink = `https://discord.com/api/oauth2/authorize?client_id=${process.env.REACT_APP_DiscordAppID}&permissions=8&redirect_uri=${redirect}&response_type=code&scope=bot%20identify`;
@@ -46,7 +48,7 @@ const ServerPicker: FC<ServerPickerProps> = () => {
     <div className={styles.ServerPicker}>
       <div className={`${styles.ServerList} ${styles.ServerListRes1}`}>
         {serverList.map((server, i) => {
-            return (<ServerItem key={i} DiscordServer={server}/>);
+            return (<ServerItem key={i} DiscordServer={server} UpdateState={props.updateState}/>);
         })}
       </div>
       <div className={styles2.ContentBox_bottom}>

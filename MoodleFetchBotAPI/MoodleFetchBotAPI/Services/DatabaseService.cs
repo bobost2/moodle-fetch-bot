@@ -1,4 +1,5 @@
-﻿using MoodleFetchBotAPI.Models.Tables;
+﻿using MoodleFetchBotAPI.Models;
+using MoodleFetchBotAPI.Models.Tables;
 
 namespace MoodleFetchBotAPI.Services
 {
@@ -36,6 +37,24 @@ namespace MoodleFetchBotAPI.Services
             MoodleFetchBotDBContext context = new MoodleFetchBotDBContext();
             var server = context.ServerLists.Where(x => x.GuildId == guildId);
             return server.Count() > 0;
+        }
+
+        public MoodleInfo FetchUserData(string discordId)
+        {
+            MoodleFetchBotDBContext context = new MoodleFetchBotDBContext();
+            var userRecords = context.UserTables.Where(x => x.DiscordId == discordId);
+
+            if (userRecords.Any())
+            {
+                var userRecord = userRecords.First();
+                return new MoodleInfo
+                {
+                    token = userRecord.MoodleToken,
+                    website = userRecord.MoodleDomain
+                };
+            }
+
+            return null;
         }
     }
 }

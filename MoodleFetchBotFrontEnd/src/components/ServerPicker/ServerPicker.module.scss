@@ -3,11 +3,12 @@
 }
 
 .ServerList{
-    height: 77%;
+    height: calc(100% - 85px - (20px * 2));
     display: grid;
     align-items: start;
     grid-auto-rows: minmax(100px, auto);
-    overflow: auto;
+    overflow-x: auto;
+    overflow-y: scroll;
     justify-items: center;
     padding: 20px;
 }

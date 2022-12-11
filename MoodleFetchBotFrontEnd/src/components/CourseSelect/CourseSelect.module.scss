@@ -1,0 +1,60 @@
+.CourseSelect {
+    height: 100%;
+}
+
+.CourseList{
+    height: calc(100% - 55px - (20px * 2));
+    display: grid;
+    align-items: center;
+    grid-auto-rows: minmax(100px, auto);
+    overflow-x: auto;
+    overflow-y: scroll;
+    padding: 20px;
+    justify-items: center;
+}
+
+.CourseListRes1{
+    grid-template-columns: repeat(4, 1fr);
+}
+
+@media only screen and (max-width: 1740px) {
+    .CourseListRes1 {
+        grid-template-columns: repeat(3, 1fr);
+    }
+}
+
+@media only screen and (max-width: 1300px) {
+    .CourseListRes1 {
+        grid-template-columns: repeat(2, 1fr);
+    }
+}
+
+@media only screen and (max-width: 870px) {
+    .CourseListRes1 {
+        grid-template-columns: repeat(1, 1fr);
+    }
+}
+
+.CourseLoading {
+    display: flex;
+    justify-content: center;
+    height: calc(100% - 55px);
+    align-items: center;
+    flex-direction: column;
+
+    &_text{
+        color: #d5d5d5;
+        font-size: 20px;
+        font-weight: 600;
+        margin-top: 10px;
+    }
+}
+
+.CourseBottomMenu{
+    height: 55px !important;
+    display: flex !important;
+    flex-direction: row !important;
+    justify-content: space-between !important;
+    padding-left: 10px;
+    padding-right: 10px;
+}
