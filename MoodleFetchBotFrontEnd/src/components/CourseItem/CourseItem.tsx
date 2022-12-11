@@ -1,5 +1,4 @@
-import { Avatar } from '@mui/material';
-import React, { FC, MouseEventHandler, useState } from 'react';
+import React, { FC, useState } from 'react';
 import { MoodleCourse } from '../../interfaces/MoodleCourse';
 import styles from './CourseItem.module.scss';
 
@@ -35,7 +34,7 @@ const CourseItem: FC<CourseItemProps> = (props) => {
           {props.MoodleCourse.fullname}  
         </div>
         <div>
-          <a className={styles.ViewCourse} href={props.MoodleCourse.viewurl} onClick={HandleLinkIssue} target="_blank">View course in Moodle</a>
+          <a className={styles.ViewCourse} href={props.MoodleCourse.viewurl} onClick={HandleLinkIssue} target="_blank" rel="noreferrer">View course in Moodle</a>
         </div>  
       </div>
     </div>

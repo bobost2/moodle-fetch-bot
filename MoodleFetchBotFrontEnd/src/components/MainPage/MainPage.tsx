@@ -1,4 +1,4 @@
-import React, { FC, useEffect, useState } from 'react';
+import React, { FC, useState } from 'react';
 import CourseSelect from '../CourseSelect/CourseSelect';
 import ServerPicker from '../ServerPicker/ServerPicker';
 import TopBar from '../TopBar/TopBar';
