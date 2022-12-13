@@ -39,7 +39,7 @@ namespace MoodleFetchBotAPI.Services
             return server.Count() > 0;
         }
 
-        public MoodleInfo FetchUserData(string discordId)
+        public MoodleInfo? FetchUserData(string discordId)
         {
             MoodleFetchBotDBContext context = new MoodleFetchBotDBContext();
             var userRecords = context.UserTables.Where(x => x.DiscordId == discordId);
@@ -82,6 +82,22 @@ namespace MoodleFetchBotAPI.Services
 
             if(courses.Length > 0)
                 context.SaveChanges();
+        }
+
+        public List<int>? ReturnLinkedCourses(string userId, string guildId)
+        {
+            List<int> courseIds = new List<int>();
+            MoodleFetchBotDBContext context = new MoodleFetchBotDBContext();
+            
+            var users = context.UserTables.Where(x => x.DiscordId == userId);
+            if (!users.Any()) return null;
+
+            var courses = context.ServerLists.Where(x => x.UserId == users.First().Id && x.GuildId == guildId).ToList();
+            foreach(var course in courses)
+            {
+                courseIds.Add(course.CourseId);
+            }
+            return courseIds;
         }
     }
 }

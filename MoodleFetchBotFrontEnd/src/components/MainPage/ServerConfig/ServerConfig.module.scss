@@ -1,1 +1,41 @@
-.ServerConfig {}
+.ServerConfig {
+    display: flex;
+    height: 100%;
+}
+
+.LeftMenu{
+    background: #00000014;
+    border-bottom-left-radius: 10px;
+    width: 300px;
+    border-right: 1px solid black;
+}
+
+.SelectCourse{
+    padding: 5px;
+    padding-bottom: 15px;
+    height: 100px;
+    &Text{
+        color: #BBBBBB;
+        font-weight: 600;
+        font-size: 24px;
+    }
+}
+
+.ButtonGroup{
+    display: flex;
+    flex-direction: column;
+    height: calc(100% - 120px);
+    justify-content: space-between;
+}
+
+.RightMenu{
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    width: calc(100% - 300px);
+    color: #b5b5b5;
+    font-weight: 500;
+    font-size: 30px;
+    display: flex;
+    flex-direction: column;
+}

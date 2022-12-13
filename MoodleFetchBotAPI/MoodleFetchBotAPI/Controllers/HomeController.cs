@@ -176,5 +176,38 @@ namespace MoodleFetchBotAPI.Controllers
             return Ok(new { response = "You are not supposed to look here." });
         }
 
+        [HttpPost]
+        [Route("FetchCoursesByGuild")]
+        public IActionResult FetchCoursesByGuild(TokenGuildRequest tokenGuildRequest)
+        {
+            DiscordAPIService discordAPI = new DiscordAPIService(Configuration);
+            MoodleService moodleService = new MoodleService();
+            var databaseService = new DatabaseService();
+
+            var userId = discordAPI.GetDiscordUserId(tokenGuildRequest.userToken);
+
+            if (userId == null) return Unauthorized();
+
+            var courseIds = databaseService.ReturnLinkedCourses(userId, tokenGuildRequest.guildId);
+
+
+            List<Course> courses = new List<Course>();
+            var userInfo = databaseService.FetchUserData(userId);
+            courses.AddRange(moodleService.FetchCourses(userInfo.website, userInfo.token, Course.Classification.past));
+            courses.AddRange(moodleService.FetchCourses(userInfo.website, userInfo.token, Course.Classification.inprogress));
+            courses.AddRange(moodleService.FetchCourses(userInfo.website, userInfo.token, Course.Classification.future));
+
+            List<Course> coursesFilter = new List<Course>();
+            foreach (var courseId in courseIds)
+            {
+                var result = courses.Where(x => x.id == courseId);
+                if (result.Any())
+                {
+                    coursesFilter.Add(result.First());
+                }
+            }
+
+            return Ok(new { courses = coursesFilter });
+        }
     }
 }
