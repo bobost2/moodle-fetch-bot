@@ -1,6 +1,6 @@
 import { Avatar } from '@mui/material';
 import React, { FC } from 'react';
-import { DiscordServer } from '../../interfaces/DiscordServer';
+import { DiscordServer } from '../../../../interfaces/DiscordServer';
 import styles from './ServerItem.module.scss';
 
 interface ServerItemProps {
@@ -13,6 +13,9 @@ const ServerItem: FC<ServerItemProps> = (props) => {
   function HandleClickServer(){
     if(!props.DiscordServer.configured){
       props.UpdateState(1, props.DiscordServer.id);
+    }
+    else{
+      props.UpdateState(2, props.DiscordServer.id);
     }
   }
 

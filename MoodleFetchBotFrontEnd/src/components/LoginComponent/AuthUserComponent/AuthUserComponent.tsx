@@ -25,7 +25,7 @@ const AuthUserComponent: FC<AuthUserComponentProps> = () => {
     setPassword(event.target.value);
   };
 
-  const AuthenticateUser = () => {
+  function AuthenticateUser(){
     var url_string = window.location.href; 
     var url = new URL(url_string);
     var code = url.searchParams.get("code");
@@ -135,6 +135,7 @@ const AuthUserComponent: FC<AuthUserComponentProps> = () => {
 
   useEffect(() => {
     AuthenticateUser();
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [])
 
   return (

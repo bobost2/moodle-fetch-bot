@@ -56,5 +56,32 @@ namespace MoodleFetchBotAPI.Services
 
             return null;
         }
+
+        public void LinkGuildToCourse(string userId, string guildId, int[] courses)
+        {
+            MoodleFetchBotDBContext context = new MoodleFetchBotDBContext();
+            var usersDB = context.UserTables.Where(x => x.DiscordId == userId);
+
+            if (!usersDB.Any()) return;
+
+            var user = usersDB.First();
+
+            foreach (int course in courses)
+            {
+                if(!context.ServerLists.Where(x => x.CourseId == course && x.GuildId == guildId).Any())
+                {
+                    ServerList courseEntry = new ServerList
+                    {
+                        CourseId = course,
+                        UserId = user.Id,
+                        GuildId = guildId,
+                    };
+                    context.Add(courseEntry);
+                }
+            }
+
+            if(courses.Length > 0)
+                context.SaveChanges();
+        }
     }
 }

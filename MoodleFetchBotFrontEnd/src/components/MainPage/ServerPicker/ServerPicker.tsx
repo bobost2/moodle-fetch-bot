@@ -1,9 +1,9 @@
 import { Button } from '@mui/material';
 import React, { FC, useEffect, useState } from 'react';
-import { DiscordServer } from '../../interfaces/DiscordServer';
-import ServerItem from '../ServerItem/ServerItem';
+import { DiscordServer } from '../../../interfaces/DiscordServer';
+import ServerItem from './ServerItem/ServerItem';
 import styles from './ServerPicker.module.scss';
-import styles2 from '../MainPage/MainPage.module.scss';
+import styles2 from '../../MainPage/MainPage.module.scss';
 
 interface ServerPickerProps {
   updateState: Function

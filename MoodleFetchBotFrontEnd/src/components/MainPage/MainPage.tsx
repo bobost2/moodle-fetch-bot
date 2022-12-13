@@ -1,7 +1,8 @@
 import React, { FC, useState } from 'react';
-import CourseSelect from '../CourseSelect/CourseSelect';
-import ServerPicker from '../ServerPicker/ServerPicker';
-import TopBar from '../TopBar/TopBar';
+import CourseSelect from './CourseSelect/CourseSelect';
+import ServerConfig from './ServerConfig/ServerConfig';
+import ServerPicker from './ServerPicker/ServerPicker';
+import TopBar from './TopBar/TopBar';
 import styles from './MainPage.module.scss';
 
 interface MainPageProps {}
@@ -19,6 +20,10 @@ const MainPage: FC<MainPageProps> = () => {
       case 1:
         setTitle("Select courses:");
         setMainWindow(<CourseSelect updateState={UpdateAppState} ServerID={serverId ?? ''}/>);
+        break;
+      case 2:
+        setTitle("Configure server:");
+        setMainWindow(<ServerConfig updateState={UpdateAppState} ServerID={serverId ?? ''}/>);
         break;
     }
   }

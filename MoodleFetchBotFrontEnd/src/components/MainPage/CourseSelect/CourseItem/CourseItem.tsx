@@ -1,5 +1,5 @@
 import React, { FC, useState } from 'react';
-import { MoodleCourse } from '../../interfaces/MoodleCourse';
+import { MoodleCourse } from '../../../../interfaces/MoodleCourse';
 import styles from './CourseItem.module.scss';
 
 interface CourseItemProps {

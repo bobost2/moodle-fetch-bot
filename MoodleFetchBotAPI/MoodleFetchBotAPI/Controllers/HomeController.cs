@@ -99,7 +99,7 @@ namespace MoodleFetchBotAPI.Controllers
             foreach (var guild in guilds)
             {
                 //If the bot is added by a non-owner, it will cause issues
-                if(guild.OwnerId.ToString() == userId)
+                if (guild.OwnerId.ToString() == userId)
                 {
                     returnedGuilds.Add(new SimpleDiscordGuild
                     {
@@ -129,7 +129,7 @@ namespace MoodleFetchBotAPI.Controllers
                             });
                         }
                     }
-                }  
+                }
             }
 
             return Ok(new { guilds = returnedGuilds });
@@ -137,7 +137,7 @@ namespace MoodleFetchBotAPI.Controllers
 
         [HttpPost]
         [Route("FetchMoodleCourses")]
-        public async Task<IActionResult> FetchMoodleCourses(DiscordSingleToken discordSingleToken)
+        public IActionResult FetchMoodleCourses(DiscordSingleToken discordSingleToken)
         {
             MoodleService moodleService = new MoodleService();
             DiscordAPIService discordAPI = new DiscordAPIService(Configuration);
@@ -154,8 +154,25 @@ namespace MoodleFetchBotAPI.Controllers
             courses.AddRange(moodleService.FetchCourses(website, token, Course.Classification.past));
             courses.AddRange(moodleService.FetchCourses(website, token, Course.Classification.inprogress));
             courses.AddRange(moodleService.FetchCourses(website, token, Course.Classification.future));
-            
-            return Ok( new { courses = courses });
+
+            return Ok(new { courses = courses });
         }
+
+        [HttpPost]
+        [Route("LinkMoodleCoursesToGuild")]
+        public IActionResult LinkMoodleCoursesToGuild(TokenCourseRequest tokenCourseRequest)
+        {
+            DiscordAPIService discordAPI = new DiscordAPIService(Configuration);
+            var databaseService = new DatabaseService();
+
+            var userId = discordAPI.GetDiscordUserId(tokenCourseRequest.userToken);
+
+            if (userId == null) return Unauthorized();
+
+            databaseService.LinkGuildToCourse(userId, tokenCourseRequest.guildId, tokenCourseRequest.courses);
+
+            return Ok(new { response = "You are not supposed to look here." });
+        }
+
     }
 }

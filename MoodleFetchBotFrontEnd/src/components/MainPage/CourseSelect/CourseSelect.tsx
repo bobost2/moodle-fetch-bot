@@ -1,9 +1,9 @@
 import { Button, CircularProgress } from '@mui/material';
 import React, { FC, useEffect, useState } from 'react';
-import { MoodleCourse } from '../../interfaces/MoodleCourse';
-import CourseItem from '../CourseItem/CourseItem';
+import { MoodleCourse } from '../../../interfaces/MoodleCourse';
+import CourseItem from './CourseItem/CourseItem';
 import styles from './CourseSelect.module.scss';
-import styles2 from '../MainPage/MainPage.module.scss';
+import styles2 from '../../MainPage/MainPage.module.scss';
 
 interface CourseSelectProps {
   ServerID: string;
@@ -62,6 +62,38 @@ const CourseSelect: FC<CourseSelectProps> = (props) => {
     setSelectedElements(selectedElementsLocal);      
   }
 
+  function LinkCoursesToGuild(){
+    let userToken = localStorage.getItem('userToken');
+    let courseIds: number[] = selectedElements.map(course => course.Course.id);
+    
+    const requestOptions = {
+      method: 'POST',
+      headers: { 
+        'Content-Type': 'application/json', 
+        'Accept': 'application/json',
+      },
+      body: JSON.stringify({ 
+        userToken: userToken,
+        guildId: props.ServerID,
+        courses: courseIds
+      })
+    };
+    fetch(`${process.env.REACT_APP_APIAdress}LinkMoodleCoursesToGuild`, requestOptions)
+      .then(response => {
+        if(response.ok) {
+          return response.json()
+        } else {
+          throw new Error('Something is wrong in our end. We are sorry!');
+        }
+      })
+      .then(data => {
+        props.updateState(2, props.ServerID);
+      })
+      .catch((error) => {
+        console.error(error);
+      });
+  }
+
   function GoBack(){
     props.updateState(0);
   }
@@ -88,7 +120,7 @@ const CourseSelect: FC<CourseSelectProps> = (props) => {
       <div className={`${styles2.ContentBox_bottom} ${styles.CourseBottomMenu}`} style={{height: '48px'}}>
         <Button variant="contained" color="error" onClick={GoBack}>Go back</Button>
         <div>{selectedElementsCount} selected</div>
-        <Button disabled={!(selectedElementsCount > 0)} variant="contained" color="success">Save settings</Button>
+        <Button disabled={!(selectedElementsCount > 0)} onClick={LinkCoursesToGuild} variant="contained" color="success">Save settings</Button>
       </div>
     </div>
   );
