@@ -1,4 +1,4 @@
-﻿namespace MoodleFetchBotAPI.Models
+﻿namespace MoodleFetchBotAPI.Models.RequestTypes
 {
     public class DiscordSingleToken
     {

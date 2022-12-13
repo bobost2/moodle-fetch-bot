@@ -1,7 +1,9 @@
 ﻿using Discord.Net.Queue;
 using Discord.Net.Rest;
 using Microsoft.AspNetCore.Mvc;
-using MoodleFetchBotAPI.Models;
+using MoodleFetchBotAPI.Models.RequestTypes;
+using MoodleFetchBotAPI.Models.ReturnTypes.Discord;
+using MoodleFetchBotAPI.Models.ReturnTypes.Moodle;
 using MoodleFetchBotAPI.Services;
 using Newtonsoft.Json;
 using Newtonsoft.Json.Linq;

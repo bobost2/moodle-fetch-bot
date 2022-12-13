@@ -1,4 +1,4 @@
-﻿using MoodleFetchBotAPI.Models;
+﻿using MoodleFetchBotAPI.Models.ReturnTypes.Moodle;
 using MoodleFetchBotAPI.Models.Tables;
 
 namespace MoodleFetchBotAPI.Services

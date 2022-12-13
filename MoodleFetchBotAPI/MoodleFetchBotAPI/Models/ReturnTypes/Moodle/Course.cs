@@ -1,4 +1,4 @@
-﻿namespace MoodleFetchBotAPI.Models
+﻿namespace MoodleFetchBotAPI.Models.ReturnTypes.Moodle
 {
     public class Course
     {
@@ -13,9 +13,9 @@
 
         public enum Classification
         {
-            past=0,
-            inprogress=1,
-            future=2
+            past = 0,
+            inprogress = 1,
+            future = 2
         }
     }
 }

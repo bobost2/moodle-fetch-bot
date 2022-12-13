@@ -1,8 +1,9 @@
-﻿using MoodleFetchBotAPI.Models;
+﻿using MoodleFetchBotAPI.Models.ReturnTypes.Discord;
+using MoodleFetchBotAPI.Models.ReturnTypes.Moodle;
 using Newtonsoft.Json;
 using Newtonsoft.Json.Linq;
 using RestSharp;
-using static MoodleFetchBotAPI.Models.Course;
+using static MoodleFetchBotAPI.Models.ReturnTypes.Moodle.Course;
 
 namespace MoodleFetchBotAPI.Services
 {
