@@ -1,6 +1,9 @@
-import { FormControl, MenuItem, Select, SelectChangeEvent } from '@mui/material';
+import { Button, FormControl, MenuItem, Select, SelectChangeEvent } from '@mui/material';
 import React, { FC, useEffect, useState } from 'react';
 import { MoodleCourse } from '../../../interfaces/MoodleCourse';
+import AutomateBotSettings from './BotSettings/AutomateBotSettings/AutomateBotSettings';
+import NotificationBotSettings from './BotSettings/NotificationBotSettings/NotificationBotSettings';
+import RefreshRateBotSettings from './BotSettings/RefreshRateBotSettings/RefreshRateBotSettings';
 import styles from './ServerConfig.module.scss';
 import ServerConfigMenuButton from './ServerConfigMenuButton/ServerConfigMenuButton';
 
@@ -12,11 +15,11 @@ interface ServerConfigProps {
 const ServerConfig: FC<ServerConfigProps> = (props) => {
 
   const [courses, setCourses] = useState<MoodleCourse[]>([]);
-  const [selectedCourse, setSelectedCourse] = useState('');
+  const [selectedCourse, setSelectedCourse] = useState<number>();
   const [activeButtonIndex, setActiveButtonIndex] = useState(4);
 
   const handleChangeSelectedCourse = (event: SelectChangeEvent) => {
-    setSelectedCourse(event.target.value as string);
+    setSelectedCourse(+event.target.value);
   };
 
   function SwitchActiveButton(newActive: number){
@@ -54,6 +57,52 @@ const ServerConfig: FC<ServerConfigProps> = (props) => {
       });
   }
 
+  function SwitchWindow():JSX.Element{
+    switch(activeButtonIndex){
+      case 1:
+        return (
+          <>
+          </>
+        );
+      
+      case 2:
+        return (
+          <>
+          </>
+        );
+      
+      case 3:
+        return (
+          <>
+          </>
+        );
+
+      case 4:
+        return (
+          <div className={styles.RightMenuBotSettings}>
+            <div className={styles.RightMenuBotSettingsInner}>
+              <div>
+                <AutomateBotSettings />
+                <div style={{marginBottom: '30px'}}/>
+                <NotificationBotSettings />
+              </div>
+              <div style={{marginLeft: '30px'}}>
+                <RefreshRateBotSettings />
+              </div>
+            </div>   
+          </div>
+        );
+
+      default:
+        return (
+          <>
+            <div style={{fontSize: '50px', marginBottom: '5px'}}>🤔</div>
+            <div>Something's wrong...</div>
+          </>
+        )
+    }
+  }
+
   useEffect(() => {
     FetchCourses();
     // eslint-disable-next-line react-hooks/exhaustive-deps
@@ -80,7 +129,7 @@ const ServerConfig: FC<ServerConfigProps> = (props) => {
                   },
                 }}
                 displayEmpty
-                value={selectedCourse}
+                value={(selectedCourse ? selectedCourse.toString() : '')}
                 onChange={handleChangeSelectedCourse}
               >
                 {courses.map((course, i) => (
@@ -106,8 +155,7 @@ const ServerConfig: FC<ServerConfigProps> = (props) => {
       </div>
 
       <div className={styles.RightMenu}>
-        <div style={{fontSize: '50px', marginBottom: '5px'}}>🔒</div>
-        <div>Settings are currently disabled.</div>
+        <SwitchWindow/>
       </div>
     </div>
   );

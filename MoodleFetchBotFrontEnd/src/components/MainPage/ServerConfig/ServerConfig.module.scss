@@ -38,4 +38,19 @@
     font-size: 30px;
     display: flex;
     flex-direction: column;
+    overflow-y: auto;
+}
+
+.RightMenuBotSettings{
+    height: 100%;
+    width: 100%;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+
+    &Inner{
+        padding: 30px;
+        display: flex;
+        justify-content: center;
+    }
 }
