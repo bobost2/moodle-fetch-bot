@@ -1,10 +1,12 @@
-import { Button, FormControl, MenuItem, Select, SelectChangeEvent } from '@mui/material';
+import { FormControl, MenuItem, Select, SelectChangeEvent } from '@mui/material';
 import React, { FC, useEffect, useState } from 'react';
 import { MoodleCourse } from '../../../interfaces/MoodleCourse';
 import AutomateBotSettings from './BotSettings/AutomateBotSettings/AutomateBotSettings';
 import LeaveServerBotSettings from './BotSettings/LeaveServerBotSettings/LeaveServerBotSettings';
 import NotificationBotSettings from './BotSettings/NotificationBotSettings/NotificationBotSettings';
 import RefreshRateBotSettings from './BotSettings/RefreshRateBotSettings/RefreshRateBotSettings';
+import ForumSelect from './CourseSettings/ForumSelect/ForumSelect';
+import TrackContentItems from './CourseSettings/TrackContentItems/TrackContentItems';
 import styles from './ServerConfig.module.scss';
 import ServerConfigMenuButton from './ServerConfigMenuButton/ServerConfigMenuButton';
 
@@ -67,6 +69,9 @@ const ServerConfig: FC<ServerConfigProps> = (props) => {
               <div>
                 <NotificationBotSettings title={"Contents channel"}/>
               </div>
+              <div style={{marginLeft: '30px'}}>
+                <TrackContentItems/>
+              </div>
             </div>   
           </div>
         );
@@ -77,6 +82,9 @@ const ServerConfig: FC<ServerConfigProps> = (props) => {
             <div className={styles.RightMenuBotSettingsInner}>
               <div>
                 <NotificationBotSettings title={"Forum channel"}/>
+              </div>
+              <div style={{marginLeft: '30px'}}>
+                <ForumSelect/>
               </div>
             </div>   
           </div>

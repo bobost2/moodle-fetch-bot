@@ -1,0 +1,24 @@
+.SettingBox{
+    width: 400px;
+    height: 250px;
+    background: #0000002b;
+    border-radius: 10px;
+    box-shadow: 0 0 6px #000000bd;
+    overflow: hidden;
+
+    &Title{
+        border-top-left-radius: 10px;
+        border-top-right-radius: 10px;
+        height: 40px;
+        background: #0000002b;
+        border-bottom: 1px solid #00000059;
+    }
+}
+.CenterAndFitCheckboxes{
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    overflow-y: scroll;
+    height: calc(100% - 40px - (10px * 2));
+    padding: 10px;
+}

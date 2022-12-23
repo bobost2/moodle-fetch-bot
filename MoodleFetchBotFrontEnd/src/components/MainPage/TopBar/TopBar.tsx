@@ -61,11 +61,11 @@ const TopBar: FC<TopBarProps> = () => {
       </div>
       
       <div style={{display: "flex", alignItems: 'center'}}>
-        <Tooltip title="Settings">
-          <IconButton aria-label="settings-button" size="large">
+        {/* <Tooltip title="Settings"> */}
+          <IconButton disabled aria-label="settings-button" size="large">
             <SettingsIcon />
           </IconButton>
-        </Tooltip>
+        {/* </Tooltip> */}
         <Tooltip title="Logout">       
           <IconButton onClick={Logout} aria-label="logout-button" size="large">
             <LogoutIcon />
