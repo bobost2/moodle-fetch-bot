@@ -17,8 +17,8 @@
 .CenterAndFitCheckboxes{
     display: flex;
     align-items: center;
-    justify-content: center;
     overflow-y: scroll;
-    height: calc(100% - 40px - (10px * 2));
+    height: calc(100% - 40px - 20px);
     padding: 10px;
+    flex-direction: column;
 }
