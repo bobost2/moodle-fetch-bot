@@ -1,4 +1,5 @@
-﻿using MoodleFetchBotAPI.Models.Tables;
+﻿using MoodleFetchBotAPI.Models.ReturnTypes.Moodle;
+using MoodleFetchBotAPI.Models.Tables;
 
 namespace MoodleFetchBotAPI.Services
 {
@@ -29,6 +30,74 @@ namespace MoodleFetchBotAPI.Services
                 context.Add(user);
                 context.SaveChanges();
             }
+        }
+
+        public bool CheckIfServerRecordExists(string guildId)
+        {
+            MoodleFetchBotDBContext context = new MoodleFetchBotDBContext();
+            var server = context.ServerLists.Where(x => x.GuildId == guildId);
+            return server.Count() > 0;
+        }
+
+        public MoodleInfo? FetchUserData(string discordId)
+        {
+            MoodleFetchBotDBContext context = new MoodleFetchBotDBContext();
+            var userRecords = context.UserTables.Where(x => x.DiscordId == discordId);
+
+            if (userRecords.Any())
+            {
+                var userRecord = userRecords.First();
+                return new MoodleInfo
+                {
+                    token = userRecord.MoodleToken,
+                    website = userRecord.MoodleDomain
+                };
+            }
+
+            return null;
+        }
+
+        public void LinkGuildToCourse(string userId, string guildId, int[] courses)
+        {
+            MoodleFetchBotDBContext context = new MoodleFetchBotDBContext();
+            var usersDB = context.UserTables.Where(x => x.DiscordId == userId);
+
+            if (!usersDB.Any()) return;
+
+            var user = usersDB.First();
+
+            foreach (int course in courses)
+            {
+                if(!context.ServerLists.Where(x => x.CourseId == course && x.GuildId == guildId).Any())
+                {
+                    ServerList courseEntry = new ServerList
+                    {
+                        CourseId = course,
+                        UserId = user.Id,
+                        GuildId = guildId,
+                    };
+                    context.Add(courseEntry);
+                }
+            }
+
+            if(courses.Length > 0)
+                context.SaveChanges();
+        }
+
+        public List<int>? ReturnLinkedCourses(string userId, string guildId)
+        {
+            List<int> courseIds = new List<int>();
+            MoodleFetchBotDBContext context = new MoodleFetchBotDBContext();
+            
+            var users = context.UserTables.Where(x => x.DiscordId == userId);
+            if (!users.Any()) return null;
+
+            var courses = context.ServerLists.Where(x => x.UserId == users.First().Id && x.GuildId == guildId).ToList();
+            foreach(var course in courses)
+            {
+                courseIds.Add(course.CourseId);
+            }
+            return courseIds;
         }
     }
 }

@@ -1,0 +1,34 @@
+.ServerConfigMenuButton {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    color: #ffffffa1;
+    font-size: 25px;
+    font-weight: 600;
+    padding: 5px 10px;
+    border-top: 1px black solid;
+    cursor: default;
+}
+
+.ServerConfigMenuButton:hover {
+    background: #00000021;
+    cursor: pointer;
+}
+
+.ServerConfigMenuButton:active {
+    background: #00000038;
+}
+
+.LeftBorderFix{
+    border-bottom-left-radius: 10px;
+}
+
+.SelectedBG {
+    background: #ffffff15;
+}
+.SelectedBG:hover {
+    background: #ababab15 !important;
+}
+.SelectedBG:active {
+    background: #71717115 !important;
+}

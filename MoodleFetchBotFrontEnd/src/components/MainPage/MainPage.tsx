@@ -1,31 +1,42 @@
-import { Button } from '@mui/material';
-import React, { FC, useEffect, useState } from 'react';
-import TopBar from '../TopBar/TopBar';
+import React, { FC, useState } from 'react';
+import CourseSelect from './CourseSelect/CourseSelect';
+import ServerConfig from './ServerConfig/ServerConfig';
+import ServerPicker from './ServerPicker/ServerPicker';
+import TopBar from './TopBar/TopBar';
 import styles from './MainPage.module.scss';
 
 interface MainPageProps {}
 
 const MainPage: FC<MainPageProps> = () => {
-  const redirect = encodeURIComponent(`${process.env.REACT_APP_RedirectURL}`);
-  var generateBotLink = `https://discord.com/api/oauth2/authorize?client_id=${process.env.REACT_APP_DiscordAppID}&permissions=8&redirect_uri=${redirect}&response_type=code&scope=bot%20identify`;
-    
+  const [title, setTitle] = useState("Your servers:");
+  const [mainWindow, setMainWindow] = useState<JSX.Element>(<ServerPicker updateState={UpdateAppState}/>);
+
+  function UpdateAppState(state:number, serverId?:string) {
+    switch (state){
+      case 0:
+        setTitle("Your servers:");
+        setMainWindow(<ServerPicker updateState={UpdateAppState}/>);
+        break;
+      case 1:
+        setTitle("Select courses:");
+        setMainWindow(<CourseSelect updateState={UpdateAppState} ServerID={serverId ?? ''}/>);
+        break;
+      case 2:
+        setTitle("Configure server:");
+        setMainWindow(<ServerConfig updateState={UpdateAppState} ServerID={serverId ?? ''}/>);
+        break;
+    }
+  }
+
   return (  
     <div>
       <TopBar/>
       <div className={styles.MainPage}>
         <div className={styles.ContentBox}>
           <div className={styles.ContentBox_title}>
-            Your servers:
+            {title}
           </div>
-          <div>
-
-          </div>
-          <div className={styles.ContentBox_bottom}>
-            <div style={{marginBottom: '8px'}}>Not seeing your server?</div>
-            <Button onClick={() => window.location.href = generateBotLink} variant="contained" style={{background: '#005ebf', color: 'white'}}>
-              Invite bot
-            </Button>
-          </div>
+          {mainWindow}
         </div>
       </div>
     </div>

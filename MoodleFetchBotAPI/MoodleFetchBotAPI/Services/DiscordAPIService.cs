@@ -1,4 +1,4 @@
-﻿using MoodleFetchBotAPI.Models;
+﻿using MoodleFetchBotAPI.Models.ReturnTypes.Discord;
 using RestSharp;
 using System.Text.Json;
 

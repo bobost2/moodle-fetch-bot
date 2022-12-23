@@ -1,0 +1,36 @@
+.ServerPicker {
+    height: 100%;
+}
+
+.ServerList{
+    height: calc(100% - 85px - (20px * 2));
+    display: grid;
+    align-items: start;
+    grid-auto-rows: minmax(100px, auto);
+    overflow-x: auto;
+    overflow-y: scroll;
+    justify-items: center;
+    padding: 20px;
+}
+
+.ServerListRes1{
+    grid-template-columns: repeat(4, 1fr);
+}
+
+@media only screen and (max-width: 1740px) {
+    .ServerListRes1 {
+        grid-template-columns: repeat(3, 1fr);
+    }
+}
+
+@media only screen and (max-width: 1300px) {
+    .ServerListRes1 {
+        grid-template-columns: repeat(2, 1fr);
+    }
+}
+
+@media only screen and (max-width: 870px) {
+    .ServerListRes1 {
+        grid-template-columns: repeat(1, 1fr);
+    }
+}

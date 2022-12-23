@@ -17,6 +17,7 @@ namespace MoodleFetchBotAPI.Models.Tables
         }
 
         public virtual DbSet<EfmigrationsHistory> EfmigrationsHistories { get; set; } = null!;
+        public virtual DbSet<ServerList> ServerLists { get; set; } = null!;
         public virtual DbSet<UserTable> UserTables { get; set; } = null!;
 
         protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
@@ -42,6 +43,21 @@ namespace MoodleFetchBotAPI.Models.Tables
                 entity.Property(e => e.MigrationId).HasMaxLength(150);
 
                 entity.Property(e => e.ProductVersion).HasMaxLength(32);
+            });
+
+            modelBuilder.Entity<ServerList>(entity =>
+            {
+                entity.ToTable("ServerList");
+
+                entity.HasIndex(e => e.UserId, "FK_ServerToUser");
+
+                entity.Property(e => e.GuildId).HasColumnType("text");
+
+                entity.HasOne(d => d.User)
+                    .WithMany(p => p.ServerLists)
+                    .HasForeignKey(d => d.UserId)
+                    .OnDelete(DeleteBehavior.ClientSetNull)
+                    .HasConstraintName("FK_ServerToUser");
             });
 
             modelBuilder.Entity<UserTable>(entity =>

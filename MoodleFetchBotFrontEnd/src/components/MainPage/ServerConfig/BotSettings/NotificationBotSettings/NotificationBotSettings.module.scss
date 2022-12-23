@@ -1,0 +1,31 @@
+.SettingBox{
+    width: 400px;
+    height: 250px;
+    background: #0000002b;
+    border-radius: 10px;
+    box-shadow: 0 0 6px #000000bd;
+
+    &Title{
+        border-top-left-radius: 10px;
+        border-top-right-radius: 10px;
+        height: 40px;
+        background: #0000002b;
+        border-bottom: 1px solid #00000059;
+    }
+
+    &Line{
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+    }
+
+    &LineText{
+        font-size: 14px;
+    }
+
+    &SingleLine{
+        background: #b5b5b5a3;
+        width: 45%;
+        height: 1px;
+    }
+}

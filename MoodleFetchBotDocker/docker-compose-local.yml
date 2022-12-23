@@ -45,6 +45,7 @@ services:
   #     DiscordClientId: "${DISCORD_CLIENT_ID}"
   #     DiscordClientSecret: "${DISCORD_CLIENT_SECRET}"
   #     DBPassword: "${DATABASE_PASSWORD}"
+  #     MYSQL_DATABASE_IP: mysql
 
 volumes:
   mysql_data:
