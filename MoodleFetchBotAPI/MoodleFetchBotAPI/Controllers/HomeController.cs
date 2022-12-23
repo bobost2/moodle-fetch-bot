@@ -209,5 +209,43 @@ namespace MoodleFetchBotAPI.Controllers
 
             return Ok(new { courses = coursesFilter });
         }
+
+        [HttpPost]
+        [Route("FetchMoodleCourseModules")]
+        public IActionResult FetchMoodleCourseModules(CourseModuleRequest courseModuleRequest)
+        {
+            DiscordAPIService discordAPI = new DiscordAPIService(Configuration);
+            MoodleService moodleService = new MoodleService();
+            var databaseService = new DatabaseService();
+
+            var userId = discordAPI.GetDiscordUserId(courseModuleRequest.userToken);
+
+            if (userId == null) return Unauthorized();
+
+            var userInfo = databaseService.FetchUserData(userId);
+            var courseDetails = moodleService.FetchCourseData(userInfo.website, userInfo.token, courseModuleRequest.courseId);
+
+            List<ModuleReturn> moduleReturn = new List<ModuleReturn>();
+
+            foreach(var course in courseDetails)
+            {
+                foreach(var module in course.modules)
+                {
+                    string mod = module.modname;
+                    if (mod != "forum" && mod != "assign" && !moduleReturn.Where(x => x.modname == mod).Any())
+                    {
+                        moduleReturn.Add(new ModuleReturn
+                        {
+                            id = moduleReturn.Count,
+                            modname = mod,
+                            modplural = module.modplural,
+                            selected = false
+                        });
+                    }
+                }
+            }
+
+            return Ok(new {modules = moduleReturn});
+        }
     }
 }
