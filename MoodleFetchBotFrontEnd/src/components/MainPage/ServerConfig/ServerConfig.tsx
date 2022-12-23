@@ -2,6 +2,7 @@ import { Button, FormControl, MenuItem, Select, SelectChangeEvent } from '@mui/m
 import React, { FC, useEffect, useState } from 'react';
 import { MoodleCourse } from '../../../interfaces/MoodleCourse';
 import AutomateBotSettings from './BotSettings/AutomateBotSettings/AutomateBotSettings';
+import LeaveServerBotSettings from './BotSettings/LeaveServerBotSettings/LeaveServerBotSettings';
 import NotificationBotSettings from './BotSettings/NotificationBotSettings/NotificationBotSettings';
 import RefreshRateBotSettings from './BotSettings/RefreshRateBotSettings/RefreshRateBotSettings';
 import styles from './ServerConfig.module.scss';
@@ -61,20 +62,35 @@ const ServerConfig: FC<ServerConfigProps> = (props) => {
     switch(activeButtonIndex){
       case 1:
         return (
-          <>
-          </>
+          <div className={styles.RightMenuBotSettings}>
+            <div className={styles.RightMenuBotSettingsInner}>
+              <div>
+                <NotificationBotSettings title={"Contents channel"}/>
+              </div>
+            </div>   
+          </div>
         );
       
       case 2:
         return (
-          <>
-          </>
+          <div className={styles.RightMenuBotSettings}>
+            <div className={styles.RightMenuBotSettingsInner}>
+              <div>
+                <NotificationBotSettings title={"Forum channel"}/>
+              </div>
+            </div>   
+          </div>
         );
       
       case 3:
         return (
-          <>
-          </>
+          <div className={styles.RightMenuBotSettings}>
+            <div className={styles.RightMenuBotSettingsInner}>
+              <div>
+                <NotificationBotSettings title={"Assignments channel"}/>
+              </div>
+            </div>   
+          </div>
         );
 
       case 4:
@@ -84,10 +100,12 @@ const ServerConfig: FC<ServerConfigProps> = (props) => {
               <div>
                 <AutomateBotSettings />
                 <div style={{marginBottom: '30px'}}/>
-                <NotificationBotSettings />
+                <NotificationBotSettings title={"Notification settings channel"} />
               </div>
               <div style={{marginLeft: '30px'}}>
                 <RefreshRateBotSettings />
+                <div style={{marginBottom: '30px'}}/>
+                <LeaveServerBotSettings />
               </div>
             </div>   
           </div>

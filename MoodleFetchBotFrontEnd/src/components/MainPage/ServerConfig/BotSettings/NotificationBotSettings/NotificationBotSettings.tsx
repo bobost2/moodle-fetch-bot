@@ -2,9 +2,11 @@ import { Button, FormControl, MenuItem, Select, SelectChangeEvent } from '@mui/m
 import React, { FC, useState } from 'react';
 import styles from './NotificationBotSettings.module.scss';
 
-interface NotificationBotSettingsProps {}
+interface NotificationBotSettingsProps {
+  title: string;
+}
 
-const NotificationBotSettings: FC<NotificationBotSettingsProps> = () => {
+const NotificationBotSettings: FC<NotificationBotSettingsProps> = (props) => {
 
   const [selectedServer, setSelectedServer] = useState<string>("");
 
@@ -14,7 +16,7 @@ const NotificationBotSettings: FC<NotificationBotSettingsProps> = () => {
 
   return (
     <div className={styles.SettingBox}>
-      <div className={styles.SettingBoxTitle} style={{fontSize: '25px'}}>Notification settings channel</div>
+      <div className={styles.SettingBoxTitle} style={{fontSize: '25px'}}>{props.title}</div>
       <Button style={{margin: '20px 0px 15px 0px'}} variant="contained" color="secondary">Create channel automatically</Button>
       <div className={styles.SettingBoxLine}>
         <div className={styles.SettingBoxSingleLine}/>
