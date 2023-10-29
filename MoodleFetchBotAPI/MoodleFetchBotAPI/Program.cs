@@ -1,10 +1,5 @@
-using Microsoft.EntityFrameworkCore;
-using MoodleFetchBotAPI.Controllers;
 using MoodleFetchBotAPI.Services;
-using Newtonsoft.Json;
-using System;
 using System.Text.Json.Serialization;
-using System.Text.RegularExpressions;
 
 var builder = WebApplication.CreateBuilder(args);
 
