@@ -77,22 +77,14 @@ namespace MoodleFetchBotAPI.Services
 
             if (user == null) return;
 
-            foreach (int course in courses)
+            var courseEntry = new ServerList
             {
-                var courseEntryCount = await _serverListCollection.Find(x => x.courseId == course && x.guildId == guildId).CountDocumentsAsync();
+                courseIds = courses,
+                userId = user.Id,
+                guildId = guildId,
+            };
 
-                if (courseEntryCount == 0)
-                {
-                    var courseEntry = new ServerList
-                    {
-                        courseId = course,
-                        userId = user.Id,
-                        guildId = guildId,
-                    };
-                    
-                    await _serverListCollection.InsertOneAsync(courseEntry);
-                }
-            }
+            await _serverListCollection.InsertOneAsync(courseEntry);
         }
 
         public async Task<List<int>?> ReturnLinkedCourses(string userId, string guildId)
@@ -102,11 +94,11 @@ namespace MoodleFetchBotAPI.Services
             
             if (user == null) return null;
 
-            var courses = await _serverListCollection.Find(x => x.userId == user.Id && x.guildId == guildId).ToListAsync();
+            var courses = await _serverListCollection.Find(x => x.userId == user.Id && x.guildId == guildId).SingleOrDefaultAsync();
 
-            foreach (var course in courses)
+            if (courses != null)
             {
-                courseIds.Add(course.courseId);
+                courseIds = courses.courseIds.ToList();
             }
 
             return courseIds;

@@ -18,7 +18,7 @@ namespace MoodleFetchBotAPI.Models.Collections
         [BsonElement("guildId")]
         public string guildId { get; set; } = null!;
 
-        [BsonElement("courseId")]
-        public int courseId { get; set; }
+        [BsonElement("courseIds")]
+        public int[] courseIds { get; set; }
     }
 }
