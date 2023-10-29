@@ -17,9 +17,11 @@ namespace MoodleFetchBotAPI.Controllers
     public class HomeController : Controller
     {
         private readonly IConfiguration Configuration;
-        public HomeController(IConfiguration configuration)
+        private readonly MongoDBService _mongoDbService;
+        public HomeController(IConfiguration configuration, MongoDBService mongoDbService)
         {
             Configuration = configuration;
+            _mongoDbService = mongoDbService;
         }
 
         /*
@@ -57,19 +59,18 @@ namespace MoodleFetchBotAPI.Controllers
 
         [HttpPost]
         [Route("CheckUserMoodleToken")]
-        public IActionResult CheckUserMoodleToken(DiscordSingleToken discordSingleToken)
+        public async Task<IActionResult> CheckUserMoodleToken(DiscordSingleToken discordSingleToken)
         {
             var discordAPI = new DiscordAPIService(Configuration);
-            var database = new DatabaseService();
             string userId = discordAPI.GetDiscordUserId(discordSingleToken.userToken);
-            bool status = database.CheckIfUserExists(userId);
+            bool status = await _mongoDbService.CheckIfUserExists(userId);
 
             return Ok(new { hasBeenRegistered = status });
         }
 
         [HttpPost]
         [Route("LinkMoodleAccount")]
-        public IActionResult LinkMoodleAccount(MoodleCredentials moodleCredentials)
+        public async Task<IActionResult> LinkMoodleAccount(MoodleCredentials moodleCredentials)
         {
             var moodleAPI = new MoodleService();
             var moodleToken = moodleAPI.GetToken(moodleCredentials.website, moodleCredentials.username, moodleCredentials.password);
@@ -78,10 +79,9 @@ namespace MoodleFetchBotAPI.Controllers
                 return Ok(new { verificationPassed = false });
 
             var discordAPI = new DiscordAPIService(Configuration);
-            var database = new DatabaseService();
 
             string userId = discordAPI.GetDiscordUserId(moodleCredentials.userToken);
-            database.LinkMoodleToDiscordId(userId, moodleToken, moodleCredentials.website);
+            await _mongoDbService.LinkMoodleToDiscordId(userId, moodleToken, moodleCredentials.website);
 
             return Ok(new { verificationPassed = true });
         }
@@ -91,7 +91,6 @@ namespace MoodleFetchBotAPI.Controllers
         public async Task<IActionResult> FetchBotServersForUser(DiscordSingleToken discordSingleToken)
         {
             var discordAPI = new DiscordAPIService(Configuration);
-            var databaseAPI = new DatabaseService();
 
             var guilds = await DiscordBotService.GetGulds();
             var userId = discordAPI.GetDiscordUserId(discordSingleToken.userToken);
@@ -108,7 +107,7 @@ namespace MoodleFetchBotAPI.Controllers
                         id = guild.Id.ToString(),
                         name = guild.Name,
                         iconUrl = guild.IconUrl,
-                        configured = databaseAPI.CheckIfServerRecordExists(guild.Id.ToString())
+                        configured = await _mongoDbService.CheckIfServerRecordExists(guild.Id.ToString())
                     });
                 }
                 else
@@ -127,7 +126,7 @@ namespace MoodleFetchBotAPI.Controllers
                                 id = guild.Id.ToString(),
                                 name = guild.Name,
                                 iconUrl = guild.IconUrl,
-                                configured = databaseAPI.CheckIfServerRecordExists(guild.Id.ToString())
+                                configured = await _mongoDbService.CheckIfServerRecordExists(guild.Id.ToString())
                             });
                         }
                     }
@@ -139,16 +138,15 @@ namespace MoodleFetchBotAPI.Controllers
 
         [HttpPost]
         [Route("FetchMoodleCourses")]
-        public IActionResult FetchMoodleCourses(DiscordSingleToken discordSingleToken)
+        public async Task<IActionResult> FetchMoodleCourses(DiscordSingleToken discordSingleToken)
         {
             MoodleService moodleService = new MoodleService();
             DiscordAPIService discordAPI = new DiscordAPIService(Configuration);
-            var databaseService = new DatabaseService();
 
             List<Course> courses = new List<Course>();
             string userId = discordAPI.GetDiscordUserId(discordSingleToken.userToken);
 
-            var userInfo = databaseService.FetchUserData(userId);
+            var userInfo = await _mongoDbService.FetchUserData(userId);
 
             string website = userInfo.website;
             string token = userInfo.token;
@@ -162,37 +160,35 @@ namespace MoodleFetchBotAPI.Controllers
 
         [HttpPost]
         [Route("LinkMoodleCoursesToGuild")]
-        public IActionResult LinkMoodleCoursesToGuild(TokenCourseRequest tokenCourseRequest)
+        public async Task<IActionResult> LinkMoodleCoursesToGuild(TokenCourseRequest tokenCourseRequest)
         {
             DiscordAPIService discordAPI = new DiscordAPIService(Configuration);
-            var databaseService = new DatabaseService();
 
             var userId = discordAPI.GetDiscordUserId(tokenCourseRequest.userToken);
 
             if (userId == null) return Unauthorized();
 
-            databaseService.LinkGuildToCourse(userId, tokenCourseRequest.guildId, tokenCourseRequest.courses);
+            await _mongoDbService.LinkGuildToCourse(userId, tokenCourseRequest.guildId, tokenCourseRequest.courses);
 
             return Ok(new { response = "You are not supposed to look here." });
         }
 
         [HttpPost]
         [Route("FetchCoursesByGuild")]
-        public IActionResult FetchCoursesByGuild(TokenGuildRequest tokenGuildRequest)
+        public async Task<IActionResult> FetchCoursesByGuild(TokenGuildRequest tokenGuildRequest)
         {
             DiscordAPIService discordAPI = new DiscordAPIService(Configuration);
             MoodleService moodleService = new MoodleService();
-            var databaseService = new DatabaseService();
 
             var userId = discordAPI.GetDiscordUserId(tokenGuildRequest.userToken);
 
             if (userId == null) return Unauthorized();
 
-            var courseIds = databaseService.ReturnLinkedCourses(userId, tokenGuildRequest.guildId);
+            var courseIds = await _mongoDbService.ReturnLinkedCourses(userId, tokenGuildRequest.guildId);
 
 
             List<Course> courses = new List<Course>();
-            var userInfo = databaseService.FetchUserData(userId);
+            var userInfo = await _mongoDbService.FetchUserData(userId);
             courses.AddRange(moodleService.FetchCourses(userInfo.website, userInfo.token, Course.Classification.past));
             courses.AddRange(moodleService.FetchCourses(userInfo.website, userInfo.token, Course.Classification.inprogress));
             courses.AddRange(moodleService.FetchCourses(userInfo.website, userInfo.token, Course.Classification.future));
@@ -212,17 +208,16 @@ namespace MoodleFetchBotAPI.Controllers
 
         [HttpPost]
         [Route("FetchMoodleCourseModules")]
-        public IActionResult FetchMoodleCourseModules(CourseModuleRequest courseModuleRequest)
+        public async Task<IActionResult> FetchMoodleCourseModules(CourseModuleRequest courseModuleRequest)
         {
             DiscordAPIService discordAPI = new DiscordAPIService(Configuration);
             MoodleService moodleService = new MoodleService();
-            var databaseService = new DatabaseService();
 
             var userId = discordAPI.GetDiscordUserId(courseModuleRequest.userToken);
 
             if (userId == null) return Unauthorized();
 
-            var userInfo = databaseService.FetchUserData(userId);
+            var userInfo = await _mongoDbService.FetchUserData(userId);
             var courseDetails = moodleService.FetchCourseData(userInfo.website, userInfo.token, courseModuleRequest.courseId);
 
             List<ModuleReturn> moduleReturn = new List<ModuleReturn>();
